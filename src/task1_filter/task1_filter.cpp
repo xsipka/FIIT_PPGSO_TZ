@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cstdlib>
 
+using namespace std;
+
 // Size of the framebuffer
 const unsigned int SIZE = 512;
 
@@ -33,15 +35,12 @@ int main() {
   auto framebuffer = new Pixel[SIZE][SIZE];
 
   // TODO: Open file lena.raw (this is 512x512 RAW GRB format)
-  FILE *file = fopen("lena.raw", "rb");
+  ifstream file ("lena.raw", ios::binary);
 
   // TODO: Read data to framebuffer and close the file
   if (file) {
-      fread(framebuffer, sizeof(Pixel), SIZE*SIZE, file );
-      while (!feof(file)) {
-          fread(framebuffer, sizeof(Pixel), SIZE * SIZE, file);
-      }
-      fclose(file);
+      file.read((char * )(framebuffer), sizeof(Pixel) * SIZE * SIZE);
+      file.close();
   }
   else {
       std::cout << "File not found ... " << std::endl;
@@ -59,20 +58,21 @@ int main() {
       framebuffer[y][x].blue = grey;
 
       // Noise
-      //framebuffer[y][x].red = check_value(float (framebuffer[y][x].red + rand() % 100)); // NOLINT(cert-msc50-cpp)
-      //framebuffer[y][x].green = check_value(float (framebuffer[y][x].green + rand() % 100)); // NOLINT(cert-msc50-cpp)
-      //framebuffer[y][x].blue = check_value(float (framebuffer[y][x].blue + rand() % 100)); // NOLINT(cert-msc50-cpp)
+      framebuffer[y][x].red = check_value(float (framebuffer[y][x].red + rand() % 100)); // NOLINT(cert-msc50-cpp)
+      framebuffer[y][x].green = check_value(float (framebuffer[y][x].green + rand() % 100)); // NOLINT(cert-msc50-cpp)
+      framebuffer[y][x].blue = check_value(float (framebuffer[y][x].blue + rand() % 100)); // NOLINT(cert-msc50-cpp)
     }
   }
 
   // TODO: Open file result.raw
-  FILE *result = fopen("result.raw", "wb");
+  ofstream result;
+  result.open("result.raw", ios::binary);
   std::cout << "Generating result.raw file ..." << std::endl;
 
   // TODO: Write the framebuffer to the file and close it
-  fwrite(framebuffer, sizeof(Pixel), SIZE * SIZE, result);
-  fclose(result);
+  result.write((const char *)(framebuffer), sizeof(Pixel) * SIZE * SIZE);
   std::cout << "Done." << std::endl;
+  result.close();
 
   delete[] framebuffer;
   return EXIT_SUCCESS;
