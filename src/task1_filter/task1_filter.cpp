@@ -3,6 +3,7 @@
 //        - Save as result.raw
 #include <fstream>
 #include <iostream>
+#include <cstdlib>
 
 // Size of the framebuffer
 const unsigned int SIZE = 512;
@@ -56,6 +57,11 @@ int main() {
       framebuffer[y][x].red = grey;
       framebuffer[y][x].green = grey;
       framebuffer[y][x].blue = grey;
+
+      // Noise
+      //framebuffer[y][x].red = check_value(float (framebuffer[y][x].red + rand() % 100)); // NOLINT(cert-msc50-cpp)
+      //framebuffer[y][x].green = check_value(float (framebuffer[y][x].green + rand() % 100)); // NOLINT(cert-msc50-cpp)
+      //framebuffer[y][x].blue = check_value(float (framebuffer[y][x].blue + rand() % 100)); // NOLINT(cert-msc50-cpp)
     }
   }
 
