@@ -15,6 +15,17 @@ struct Pixel {
   unsigned char blue;
 };
 
+//Checks if char value is between 0 and 255
+unsigned char check_value(float value) {
+    if (value > 255) {
+        return 255;
+    }
+    if (value < 0) {
+        return 0;
+    }
+    return (unsigned char)value;
+}
+
 
 int main() {
   // Initialize a framebuffer
@@ -24,24 +35,27 @@ int main() {
   FILE *file = fopen("lena.raw", "rb");
 
   // TODO: Read data to framebuffer and close the file
-    if (file) {
-        fread(framebuffer, sizeof(Pixel), SIZE*SIZE, file );
-        while (!feof(file)) {
-            fread(framebuffer, sizeof(Pixel), SIZE * SIZE, file);
-        }
-    }
-    else {
-        std::cout << "File not found ... " << std::endl;
-        exit(1);
-    }
+  if (file) {
+      fread(framebuffer, sizeof(Pixel), SIZE*SIZE, file );
+      while (!feof(file)) {
+          fread(framebuffer, sizeof(Pixel), SIZE * SIZE, file);
+      }
+      fclose(file);
+  }
+  else {
+      std::cout << "File not found ... " << std::endl;
+      exit(1);
+  }
 
   // Traverse the framebuffer
   for (unsigned int y = 0; y < SIZE; y++) {
     for (unsigned int x = 0; x < SIZE; x++) {
       // TODO: Apply pixel operation
-      framebuffer[y][x].red = framebuffer[y][x].red;
-      framebuffer[y][x].green = framebuffer[y][x].green;
-      framebuffer[y][x].blue = framebuffer[y][x].blue;
+      // Grayscale
+      unsigned char grey = check_value(float (framebuffer[y][x].red * 0.3 + framebuffer[y][x].green * 0.59 + framebuffer[y][x].blue * 0.11));
+      framebuffer[y][x].red = grey;
+      framebuffer[y][x].green = grey;
+      framebuffer[y][x].blue = grey;
     }
   }
 
