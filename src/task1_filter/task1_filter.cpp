@@ -21,7 +21,7 @@ struct Pixel {
 };
 
 // Checks if char value is between 0 and 255
-unsigned char check_value(float value) {
+unsigned char check_value(double value) {
     if (value > 255) {
         return 255;
     }
@@ -31,13 +31,13 @@ unsigned char check_value(float value) {
     return (unsigned char)value;
 }
 
-float modulo(float a, float b) {
-    int ans = (int) a / b;
+double modulo(double a, double b) {
+    int ans = int (a / b);
     return (a - (ans * b));
 }
 
-float calculate_hue_value(float max, float min, float r, float g, float b, float diff) {
-    float hue = -1;
+double calculate_hue_value(double max, double min, double r, double g, double b, double diff) {
+    double hue = -1;
 
     if (max != min) {
         if (max == r) {
@@ -58,7 +58,7 @@ float calculate_hue_value(float max, float min, float r, float g, float b, float
     return hue;
 }
 
-float calculate_saturation_value(float max, float diff) {
+double calculate_saturation_value(double max, double diff) {
     if (max == 0) {
         return 0;
     } else {
@@ -66,7 +66,7 @@ float calculate_saturation_value(float max, float diff) {
     }
 }
 
-float absolute_value(float val) {
+double absolute_value(double val) {
     if (val < 0) {
         return val * -1;
     } else {
@@ -74,14 +74,14 @@ float absolute_value(float val) {
     }
 }
 
-struct Pixel calculate_rgb_value(Pixel pixel, float h, float s, float v) {
-    float red = pixel.red;
-    float green = pixel.green;
-    float blue = pixel.blue;
+struct Pixel calculate_rgb_value(Pixel pixel, double h, double s, double v) {
+    double red = pixel.red;
+    double green = pixel.green;
+    double blue = pixel.blue;
 
-    float chroma = v * s;
-    float X = chroma * (1 - absolute_value(modulo(h, 2) - 1));
-    float m = v - chroma;
+    double chroma = v * s;
+    double X = chroma * (1 - absolute_value(modulo(h, 2) - 1));
+    double m = v - chroma;
 
     if (h <= 1) {
         red = chroma + m;
@@ -113,9 +113,9 @@ struct Pixel calculate_rgb_value(Pixel pixel, float h, float s, float v) {
         green = 0 + m;
         blue = X + m;
     }
-    pixel.red = red * 255;
-    pixel.green = green * 255;
-    pixel.blue = blue * 255;
+    pixel.red = static_cast<unsigned char>(red * 255);
+    pixel.green = static_cast<unsigned char>(green * 255);
+    pixel.blue = static_cast<unsigned char>(blue * 255);
     return pixel;
 }
 
@@ -142,28 +142,28 @@ int main() {
       // TODO: Apply pixel operation
 
       // RGB to HSV
-      float red = float (framebuffer[y][x].red ) / 255;
-      float green = float (framebuffer[y][x].green ) / 255;
-      float blue = float (framebuffer[y][x].blue ) / 255;
+      double red = double (framebuffer[y][x].red ) / 255;
+      double green = double (framebuffer[y][x].green ) / 255;
+      double blue = double (framebuffer[y][x].blue ) / 255;
 
-      float color_max = MAX(red, MAX (green, blue));
-      float color_min = MIN(red, MIN (green, blue));
-      float diff = color_max - color_min;
+      double color_max = MAX(red, MAX (green, blue));
+      double color_min = MIN(red, MIN (green, blue));
+      double diff = color_max - color_min;
 
-      float hue = calculate_hue_value(color_max, color_min, red, green, blue, diff);
-      float saturation = calculate_saturation_value(color_max, diff);
-      float value = color_max;
+      double hue = calculate_hue_value(color_max, color_min, red, green, blue, diff);
+      double saturation = calculate_saturation_value(color_max, diff);
+      double value = color_max;
 
       // Do something with hue or saturation
-      hue *= float (0.1);
-      saturation *= float (0.75);
-      value *= float (0.75);
+      hue *= double (0.05);
+      saturation *= double (0.75);
+      value *= double (0.75);
 
       // HSV to RGB
       framebuffer[y][x] = calculate_rgb_value(framebuffer[y][x], hue / 60, saturation, value);
 
       // Change colors to grayscale
-      //unsigned char grey = check_value(float (framebuffer[y][x].red * 0.3 + framebuffer[y][x].green * 0.59 + framebuffer[y][x].blue * 0.11));
+      //unsigned char grey = check_value(double (framebuffer[y][x].red * 0.3 + framebuffer[y][x].green * 0.59 + framebuffer[y][x].blue * 0.11));
       //framebuffer[y][x].red = grey;
       //framebuffer[y][x].green = grey;
       //framebuffer[y][x].blue = grey;
