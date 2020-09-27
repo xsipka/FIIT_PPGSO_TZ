@@ -155,18 +155,18 @@ int main() {
       float value = color_max;
 
       // Do something with hue or saturation
-      hue *= float (0.5);
-      saturation *= float (0.25);
-      value *= float (0.5);
+      hue *= float (0.1);
+      saturation *= float (0.75);
+      value *= float (0.75);
 
       // HSV to RGB
       framebuffer[y][x] = calculate_rgb_value(framebuffer[y][x], hue / 60, saturation, value);
 
       // Change colors to grayscale
-      unsigned char grey = check_value(float (framebuffer[y][x].red * 0.3 + framebuffer[y][x].green * 0.59 + framebuffer[y][x].blue * 0.11));
-      framebuffer[y][x].red = grey;
-      framebuffer[y][x].green = grey;
-      framebuffer[y][x].blue = grey;
+      //unsigned char grey = check_value(float (framebuffer[y][x].red * 0.3 + framebuffer[y][x].green * 0.59 + framebuffer[y][x].blue * 0.11));
+      //framebuffer[y][x].red = grey;
+      //framebuffer[y][x].green = grey;
+      //framebuffer[y][x].blue = grey;
     }
   }
 
