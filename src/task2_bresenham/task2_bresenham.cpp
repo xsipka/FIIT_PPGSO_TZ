@@ -1,7 +1,6 @@
 // Task 3 - Implement Bresenham drawing alg.
 //        - Draw a star using lines
 //        - Make use of std::vector to define the shape
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -104,8 +103,10 @@ int main() {
     }
 
     // Draw lines
-    for(unsigned int i = 0; i < points.size() - 1; i++) {
-        drawLine(framebuffer, points[i], points[i + 1]);
+    for (unsigned int i = 0; i < points.size() - 1; i++) {
+        for (unsigned int j = i; j < points.size() - 1; j++) {
+            drawLine(framebuffer, points[i], points[j]);
+        }
     }
 
     // Save the result
