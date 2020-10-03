@@ -20,24 +20,28 @@ struct Point {
 };
 
 
-// Prints lines that are more horizontal (delta x > delta y)
-void drawLineAxisX (ppgso::Image& framebuffer, int x1, int x2, int y1, int y2) {
+// Bresenham drawing algorithm
+void bresenham(ppgso::Image& framebuffer, int x1, int x2, int y1, int y2, bool check) {
     int delta_x = x2 - x1;
     int delta_y = y2 - y1;
-    int y_shift = 1;
+    int shift = 1;
     int y = y1;
     int error = 2 * delta_y - delta_x;
 
-    // Checks if line is increasing or decreasing on Y axis
+    // Checks if line is increasing or decreasing
     if (delta_y < 0) {
-        y_shift = -1;
+        shift = -1;
         delta_y *= -1;
     }
-    // Iterate through X, because line is more horizontal
     for (int x = x1; x <= x2; x++) {
-        framebuffer.setPixel(x, y, 32, 180, 237);
+        // If bool check is false, then X and Y are reversed
+        if (check) {
+            framebuffer.setPixel(x, y, 32, 180, 237);
+        } else {
+            framebuffer.setPixel(y, x, 32, 180, 237);
+        }
         if (error > 0) {
-            y += y_shift;
+            y += shift;
             error += 2 * (delta_y - delta_x);
         } else {
             error += 2 * delta_y;
@@ -46,33 +50,7 @@ void drawLineAxisX (ppgso::Image& framebuffer, int x1, int x2, int y1, int y2) {
 }
 
 
-// Prints lines that are more vertical (delta y > delta x)
-void drawLineAxisY (ppgso::Image& framebuffer, int x1, int x2, int y1, int y2) {
-    int delta_x = x2 - x1;
-    int delta_y = y2 - y1;
-    int x_shift = 1;
-    int x = x1;
-    int error = 2 * delta_x - delta_y;
-
-    // Checks if line is increasing or decreasing on X axis
-    if (delta_x < 0) {
-        x_shift = -1;
-        delta_x *= -1;
-    }
-    // Iterate through Y, because line is more vertical
-    for (int y = y1; y <= y2; y++) {
-        framebuffer.setPixel(x, y, 32, 180, 237);
-        if (error > 0) {
-            x += x_shift;
-            error += 2 * (delta_x - delta_y);
-        } else {
-            error += 2 * delta_x;
-        }
-    }
-}
-
-
-// Bresenham drawing algorithm
+// Decides which method of bresenham should be executed
 void drawLine(ppgso::Image& framebuffer, Point& from, Point& to) {
 
     // TODO: Implement Bresenham drawing algorithm
@@ -84,16 +62,17 @@ void drawLine(ppgso::Image& framebuffer, Point& from, Point& to) {
         // Checks if lines are from left to right or from right to left
         // If from.x > to.x, then switch starting and ending coordinates
         if (from.x > to.x) {
-            drawLineAxisX(framebuffer, to.x, from.x, to.y, from.y);
+            bresenham(framebuffer, to.x, from.x, to.y, from.y, true);
         } else {
-            drawLineAxisX(framebuffer, from.x, to.x, from.y, to.y);
+            bresenham(framebuffer, from.x, to.x, from.y, to.y, true);
         }
+    // If delta_y > delta_x, then X and Y are reversed
     } else {
         // Checks if lines are from bottom to top or from top to bottom
         if (from.y > to.y) {
-            drawLineAxisY(framebuffer, to.x, from.x, to.y, from.y);
+            bresenham(framebuffer, to.y, from.y, to.x, from.x, false);
         } else {
-            drawLineAxisY(framebuffer, from.x, to.x, from.y, to.y);
+            bresenham(framebuffer, from.y, to.y, from.x, to.x, false);
         }
     }
 }
