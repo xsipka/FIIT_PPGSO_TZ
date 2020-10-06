@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <cmath>
 #include <ppgso/ppgso.h>
 
 #include <shaders/color_vert_glsl.h>
@@ -13,7 +13,7 @@
 
 const unsigned int SIZE = 512;
 
-class BezierWindow : public ppgso::Window {
+class BezierWindow final : public ppgso::Window {
 private:
 
   // Control points for the bezier curves
@@ -21,19 +21,19 @@ private:
   // Rest of the curves are 3 control points, each reusing the last curve end
   // Defines the letter "R"
   std::vector<glm::vec2> controlPoints = {
-      { 0,  -1},
-      { 0, -.3},
-      { 0,  .3},
-      { 0,   1},
-      {.3,   1},
-      {.5,   1},
-      {.5,  .5},
-      {.5,   0},
-      {.3,   0},
-      { 0,   0},
-      {.3, -.3},
-      {.5, -.5},
-      {.5,  -1},
+      { 0.000, 0.9500 },
+      { 0.200, 0.9500 },
+      { 0.400, 0.9500 },
+      { 0.500, 0.9500 },
+      { 0.452, 0.7720 },
+      { 0.102, 0.6160 },
+      { 0.027, 0.2200 },
+      { 0.004, -0.063 },
+      { 0.253, 0.0640 },
+      { 0.410, -0.058 },
+      { 0.477, -0.127 },
+      { 0.437, -0.228 },
+      { 0.252, -0.239 },
   };
 
   // This will hold the bezier curve geometry once we generate it
@@ -45,29 +45,41 @@ private:
   // These numbers are used to pass buffer data to OpenGL
   GLuint vao = 0, vbo = 0;
 
+
+
   // Compute points for Bezier curve using 4 control points
-  glm::vec2 bezierPoint(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const float t) {
+  static glm::vec2 bezierPoint(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const float t) {
     // TODO: Compute point on the Bezier curve
-    return {};
+    float x = 0;
+    float y = 0;
+    glm::vec2 temp(x, y);
+
+    temp.x = static_cast<float>(pow((1 - t), 3) * p0.x + 3 * pow((1 - t), 2) * t * p1.x +
+                                3 * (1 - t) * pow(t, 2) * p2.x + pow(t, 3) * p3.x);
+    temp.y = static_cast<float>(pow((1 - t), 3) * p0.y + 3 * pow((1 - t), 2) * t * p1.y +
+                                3 * (1 - t) * pow(t, 2) * p2.y + pow(t, 3) * p3.y);
+    return temp;
   }
+
 
   // Compute points for a sequence of Bezier curves defined by a vector of control points
   // Each bezier curve will reuse the end point of the previous curve
   // count - Number of points to generate on each curve
   void bezierShape(int count) {
-    for(int i = 1; i < (int) controlPoints.size(); i+=3) {
-      for (int j = 0; j <= count; j++) {
-        // TODO: Generate points for each Bezier curve and insert them
-        glm::vec2 point; //= ??
-        points.emplace_back(point, 0);
+      for(int i = 0; i < (int) controlPoints.size() - 1; i += 3) {
+          for (int j = 0; j <= count; j++) {
+            // TODO: Generate points for each Bezier curve and insert them
+            float t = (float)j / count;
+            glm::vec2 point = bezierPoint(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t);
+            points.emplace_back(point, 0);
+          }
       }
-    }
   }
 
 public:
   BezierWindow() : Window{"task3_bezier", SIZE, SIZE} {
     // Generate Bezier curve points
-    bezierShape(15);
+    bezierShape(100);
 
     // Generate a vertex array object
     // This keeps track of what attributes are associated with buffers
@@ -79,7 +91,7 @@ public:
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     // TODO: Pass the control points to the GPU
-    // glBufferData(GL_ARRAY_BUFFER, ???, ???, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(points[0]), &points[0], GL_STATIC_DRAW);
 
     // Setup vertex array lookup, this tells the shader how to pick data for the "Position" input
     auto position_attrib = program.getAttribLocation("Position");
@@ -111,7 +123,7 @@ public:
     glBindVertexArray(vao);
 
     // TODO: Define the correct render mode
-    //glDrawArrays(??, 0, ??);
+    glDrawArrays(GL_LINE_STRIP, 0, (GLsizei) points.size());
   }
 };
 
