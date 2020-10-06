@@ -3,7 +3,6 @@
 //        - Generate multiple points on each bezier curve
 //        - Draw lines connecting the generated points using OpenGL
 
-#include <iostream>
 #include <vector>
 #include <cmath>
 #include <ppgso/ppgso.h>
@@ -69,12 +68,14 @@ private:
       for(int i = 0; i < (int) controlPoints.size() - 1; i += 3) {
           for (int j = 0; j <= count; j++) {
             // TODO: Generate points for each Bezier curve and insert them
-            float t = (float)j / count;
-            glm::vec2 point = bezierPoint(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3], t);
+            float t = (float)j / (float)count;
+            auto index = static_cast<unsigned long long int>(i);
+            glm::vec2 point = bezierPoint(controlPoints[index], controlPoints[index + 1], controlPoints[index + 2], controlPoints[index + 3], t);
             points.emplace_back(point, 0);
           }
       }
   }
+
 
 public:
   BezierWindow() : Window{"task3_bezier", SIZE, SIZE} {
@@ -104,7 +105,7 @@ public:
     program.setUniform("ProjectionMatrix", glm::mat4{});
 
     // Set the color uniform
-    program.setUniform("OverallColor", glm::vec3{1.0f,1.0f,1.0f});
+    program.setUniform("OverallColor", glm::vec3{0.125f,0.706f,0.929f});
   }
 
   ~BezierWindow() final {
@@ -113,8 +114,8 @@ public:
   }
 
   void onIdle() final {
-    // Set gray background
-    glClearColor(0.5f,0.5f,0.5f,0);
+    // Set black background
+    glClearColor(0,0,0,0);
 
     // Clear depth and color buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
