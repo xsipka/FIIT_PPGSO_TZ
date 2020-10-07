@@ -80,7 +80,7 @@ private:
 public:
   BezierWindow() : Window{"task3_bezier", SIZE, SIZE} {
     // Generate Bezier curve points
-    bezierShape(100);
+    bezierShape(15);
 
     // Generate a vertex array object
     // This keeps track of what attributes are associated with buffers
