@@ -22,7 +22,7 @@ class Shape {
 private:
   // 2D vectors define points/vertices of the shape
   // TODO: Define your shape points
-  std::vector<glm::vec3> vetrices;
+  std::vector<glm::vec3> vertices;
 
   // Structure representing a triangular face, usually indexes into vertices
   struct Face {
@@ -55,7 +55,7 @@ public:
     // Copy positions to gpu
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vetrices.size() * sizeof(glm::vec3), vetrices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
     // Set vertex program inputs
     auto position_attrib = program.getAttribLocation("Position");
