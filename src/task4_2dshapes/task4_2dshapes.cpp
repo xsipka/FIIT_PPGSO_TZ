@@ -108,7 +108,7 @@ public:
     void update(Shape &shape, bool fixed) {
         // TODO: Compute transformation by scaling, rotating and then translating the shape
         // Red / green star rotation
-        if (!fixed) {
+        if (fixed) {
             modelMatrix = glm::mat4(1.f);
             modelMatrix = translate(modelMatrix, position);
             modelMatrix = rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
@@ -201,9 +201,9 @@ public:
         }
 
         // Update and render each shape
-        shape1.update(shape1, false);
-        shape2.update(shape2, false);
-        shape3.update(shape2, true);
+        shape1.update(shape1, true);
+        shape2.update(shape2, true);
+        shape3.update(shape2, false);
 
         shape1.render();
         shape2.render();
