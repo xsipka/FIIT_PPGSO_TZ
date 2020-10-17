@@ -105,22 +105,28 @@ public:
     }
 
     // Set the object transformation matrix
-    void update(Shape &shape, bool circle) {
+    void update(Shape &shape, bool fixed) {
         // TODO: Compute transformation by scaling, rotating and then translating the shape
-        // Upper big star going in circle
-        if (circle) {
+        // Red / green star rotation
+        if (!fixed) {
             modelMatrix = glm::mat4(1.f);
             modelMatrix = translate(modelMatrix, position);
             modelMatrix = rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
             modelMatrix = translate(modelMatrix, -position);
             modelMatrix = glm::scale(modelMatrix, scale);
-        } /*else {
+        }
+        else {
+            // Blue star follows green star
             modelMatrix = glm::mat4(1.f);
+            modelMatrix = translate(modelMatrix, position);
+            modelMatrix = rotate(modelMatrix, glm::radians(shape.rotation.z), glm::vec3(0, 0, 1));
+            modelMatrix = translate(modelMatrix, -position);
+            // Rotation around green star
             modelMatrix = translate(modelMatrix, -shape.position);
-            modelMatrix = rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
+            modelMatrix = rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
             modelMatrix = translate(modelMatrix, shape.position);
             modelMatrix = glm::scale(modelMatrix, scale);
-        }*/
+        }
     }
 
     // Draw polygons
@@ -139,7 +145,7 @@ class ShapeWindow : public ppgso::Window {
 private:
     Shape shape1, shape2, shape3;
 public:
-    ShapeWindow() : Window{"task4_2dshapes", SIZE, SIZE} {
+    ShapeWindow() : Window{"task4_2D Shapes", SIZE, SIZE} {
         shape1.color = {1, 0, 0};
         shape2.color = {0, 1, 0};
         shape3.color = {0, 0, 1};
@@ -162,42 +168,41 @@ public:
         shape1.position.x = 0.0f;
         shape1.position.y = 0.52f;
         shape2.position = {0.f, -0.3f, 0.f};
-        shape3.position = shape2.position;
+        shape3.position.x = shape2.position.x;
+        shape3.position.y = shape2.position.y;
 
         // Manipulate rotation of the shape
         shape1.rotation.z = t * -70.0f;
-        shape3.rotation.z = t * 100.0f;
+        shape3.rotation.z = t * 70.0f;
 
         // Pendulum motion
-        float angle = fmodf(t * 70.f, 360);
+        float angle = fmodf(t * 60.f, 360);
         if (angle < 1) { angle += 1; }
 
-       if (right_dir && angle < 270) {
+        if (right_dir && angle < 270) {
             std::cout << angle << " right\n";
             shape2.rotation.z = angle;
-       }
-       if (angle >= 270 && angle < 360) {
+        }
+        if (angle >= 270 && angle < 360) {
             right_dir = false;
             std::cout << angle << " left\n";
             shape2.rotation.z = -90.f - counter;
-            counter += 0.05f;
-       }
-       else if (angle >= 0 && angle <= 90 && !right_dir) {
+            counter += 0.037f;
+        } else if (angle >= 0 && angle <= 90 && !right_dir) {
             std::cout << angle << " left\n";
-            shape2.rotation.z =  -90.f - counter;
-            counter += 0.05f;
+            shape2.rotation.z = -90.f - counter;
+            counter += 0.037f;
             right_dir = false;
-       }
-       else if (angle > 90 && !right_dir) {
-            std::cout << angle << "     " << -90.f - counter << "\n";
+        } else if (angle > 90 && !right_dir) {
+            std::cout << angle << " right\n";
             shape2.rotation.z = angle - 20;
             right_dir = true;
             counter = 0;
-       }
+        }
 
         // Update and render each shape
-        shape1.update(shape1, true);
-        shape2.update(shape2, true);
+        shape1.update(shape1, false);
+        shape2.update(shape2, false);
         shape3.update(shape2, true);
 
         shape1.render();
