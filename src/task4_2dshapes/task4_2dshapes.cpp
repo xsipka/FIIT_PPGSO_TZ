@@ -187,15 +187,15 @@ public:
             right_dir = false;
             std::cout << angle << " left\n";
             shape2.rotation.z = -90.f - counter;
-            counter += 0.037f;
+            counter += 0.04f;
         } else if (angle >= 0 && angle <= 90 && !right_dir) {
             std::cout << angle << " left\n";
             shape2.rotation.z = -90.f - counter;
-            counter += 0.037f;
+            counter += 0.04f;
             right_dir = false;
         } else if (angle > 90 && !right_dir) {
             std::cout << angle << " right\n";
-            shape2.rotation.z = angle - 20;
+            shape2.rotation.z = angle;
             right_dir = true;
             counter = 0;
         }
