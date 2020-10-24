@@ -3,6 +3,7 @@
 //        - Use color_vert/frag shader to display the polygon
 //        - Animate the object position, rotation and scale.
 
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -176,7 +177,7 @@ public:
         shape3.rotation.z = t * 70.0f;
 
         // Pendulum motion
-        float angle = fmodf(t * 60.f, 360);
+       float angle = fmodf(t * 60.f, 360);
         if (angle < 1) { angle += 1; }
 
         if (right_dir && angle < 270) {
@@ -187,11 +188,11 @@ public:
             right_dir = false;
             std::cout << angle << " left\n";
             shape2.rotation.z = -90.f - counter;
-            counter += 0.04f;
+            counter += 0.05f;
         } else if (angle >= 0 && angle <= 90 && !right_dir) {
             std::cout << angle << " left\n";
             shape2.rotation.z = -90.f - counter;
-            counter += 0.04f;
+            counter += 0.05f;
             right_dir = false;
         } else if (angle > 90 && !right_dir) {
             std::cout << angle << " right\n";
