@@ -112,7 +112,7 @@ public:
         // Compute transformation by scaling, rotating and then translating the shape
         // TODO: Update model matrix: modelMatrix = ... use position, rotation and scale
         modelMatrix = glm::mat4(1.f);
-        modelMatrix = translate(modelMatrix, position);
+        //modelMatrix = translate(modelMatrix, position);
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1, 0, 0));
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0, 1, 0));
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
@@ -124,7 +124,7 @@ public:
         // Compute transformation by scaling, rotating and then translating the shape
         // TODO: Update view matrix: modelMatrix = ... use translation -20 in Z and viewRotation
         viewMatrix = glm::mat4(1.f);
-        viewMatrix = glm::lookAt(viewRotation, glm::vec3(0.f),  glm::vec3(0.f, 1.f, 0.f));
+        viewMatrix = glm::lookAt(viewRotation, glm::vec3(0.f),  glm::vec3(0.f, 0.f, 1.f));
     }
 
     // Draw polygons
@@ -178,7 +178,7 @@ public:
         // Move and Render shape\    // Get time for animation
         auto t = static_cast<float>(glfwGetTime());
         float radius = 2.f;
-        float speed = 50.f;
+        float speed = 100.f;
 
         cube.rotation = {t * speed, t * speed, t * speed};
 
