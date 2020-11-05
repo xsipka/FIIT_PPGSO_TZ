@@ -195,7 +195,7 @@ private:
             {{-1, -.5, 0}, {-0.5, -.5, 0}, {.5, -.5, 0}, {1, -.5, -1},},
             {{-1, -1,  3}, {-0.5, -1,  0}, {.5, -1,  0}, {1, -1,  0},},
     };
-    BezierPatch bezier{controlPoints};
+    //BezierPatch bezier{controlPoints};
 
 public:
     BezierSurfaceWindow() : Window{"task6_bezier_surface", SIZE, SIZE} {
@@ -216,6 +216,16 @@ public:
 
         // Move and Render shape
         auto time = (float) glfwGetTime();
+
+        controlPoints[2][2].x = static_cast<float>(sin(time) * 1.5f);
+        controlPoints[2][2].y = static_cast<float>(sin(time) * 1.5f);
+        controlPoints[2][2].z = static_cast<float>(sin(time) * 1.5f);
+
+        controlPoints[3][1].x = static_cast<float>(cos(time) * 1.5f);
+        controlPoints[3][1].y = static_cast<float>(cos(time) * 1.5f);
+        controlPoints[3][1].z = static_cast<float>(sin(time) * 1.5f);
+
+        BezierPatch bezier(controlPoints);
 
         bezier.rotation = {time, cos(time), 0.f};
         bezier.scale = {sin(time), 1.f, 1.f};
