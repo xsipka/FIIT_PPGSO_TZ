@@ -168,7 +168,7 @@ public:
         //speed += glm::vec3{-10.5, -G,-5} * dTime;
 
         position += speed * dTime * 0.25f;
-        speed += randomize_speed(0, 25) * dTime;
+        speed += randomize_speed(0, 50) * dTime;
 
         modelMatrix = glm::mat4(1.f);
         modelMatrix = translate(modelMatrix, position);
@@ -194,11 +194,11 @@ public:
         float z = min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max - min)));
 
         if (!chance()) {
-            auto values = glm::vec3 (-x, -y, -z);
+            auto values = glm::vec3 (-x * 0.5f, -y, -z);
             return values;
         }
         else {
-            auto values = glm::vec3(-x, y, z);
+            auto values = glm::vec3(-x * 0.5f, y, z);
             return values;
         }
     }
@@ -267,11 +267,17 @@ public:
 
       glm::vec3 values;
       float x, y, z;
+      float y_min = 5.5f;
+      float y_max = 7.5f;
+      float z_min = -1.5f;
+      float z_max = -4.5f;
 
       switch (type) {
           case 'P':
               x = min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max - min)));
-              values = glm::vec3 (x, 5.f, -2.5f);
+              z = z_min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(z_max - z_min)));
+              y = y_min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(y_max - y_min)));
+              values = glm::vec3 (x, y, z);
               break;
           case 'S':
               x = min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max - min)));
