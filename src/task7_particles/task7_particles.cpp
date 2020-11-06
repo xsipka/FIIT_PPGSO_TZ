@@ -5,7 +5,6 @@
 //        - Encapsulate camera in a class
 
 #include <iostream>
-#include <vector>
 #include <map>
 #include <list>
 #include <cstdlib>
@@ -13,8 +12,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/transform.hpp>
+//#include <glm/gtx/euler_angles.hpp>
+//#include <glm/gtx/transform.hpp>
 
 #include <ppgso/ppgso.h>
 
@@ -34,11 +33,6 @@ public:
   glm::mat4 viewMatrix;
   glm::mat4 projectionMatrix;
 
-  /// Representaiton of
-  /// \param fov - Field of view (in degrees)
-  /// \param ratio - Viewport ratio (width/height)
-  /// \param near - Distance of the near clipping plane
-  /// \param far - Distance of the far clipping plane
   Camera(float fov = 45.0f, float ratio = 1.0f, float near = 0.1f, float far = 10.0f) {
     // TODO: Initialize perspective projection (hint: glm::perspective)
       float fov_final = (ppgso::PI/180.0f) * fov;
