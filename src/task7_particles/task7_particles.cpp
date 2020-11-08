@@ -249,9 +249,11 @@ public:
           auto drop = obj->is_water();
 
           if (drop.first) {
-              auto speed = randomize_vec3(-1.5f, 1.5f, 'S');
-              auto scale = randomize_vec3(0.05f, 0.15f, 'C');
-              scene.push_back(std::make_unique<CoronaParticle>(drop.second, speed, scale));
+              //for (int d =0; d < 10; d++) {   // multiple virus particles
+                auto speed = randomize_vec3(-1.5f, 1.5f, 'S');
+                auto scale = randomize_vec3(0.05f, 0.15f, 'C');
+                scene.push_back(std::make_unique<CoronaParticle>(drop.second, speed, scale));
+              //}
           }
       }
     }
