@@ -28,14 +28,14 @@ private:
     // 2D vectors define points/vertices of the shape
     // TODO: Define your shape points
     std::vector<glm::vec3> vertices{
-        {0.2,   0.6,   0},
-        {0.4,   0.4,   0},
-        {.35,   0.1,   0},
-        {0.2,   0.23,  0},
-        {.05,   0.1,   0},
-        {0.112, 0.305, 0},
-        {0.0,   0.4,   0},
-        {0.14,  0.4,   0},
+            {0.2,   0.6,   0},
+            {0.4,   0.4,   0},
+            {.35,   0.1,   0},
+            {0.2,   0.23,  0},
+            {.05,   0.1,   0},
+            {0.112, 0.305, 0},
+            {0.0,   0.4,   0},
+            {0.14,  0.4,   0},
     };
 
 
@@ -177,7 +177,7 @@ public:
         shape3.rotation.z = t * 70.0f;
 
         // Pendulum motion
-       float angle = fmodf(t * 60.f, 360);
+        float angle = fmodf(t * 60.f, 360);
         if (angle < 1) { angle += 1; }
 
         if (right_dir && angle < 270) {

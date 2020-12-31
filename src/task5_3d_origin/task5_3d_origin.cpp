@@ -112,10 +112,11 @@ public:
         // Compute transformation by scaling, rotating and then translating the shape
         // TODO: Update model matrix: modelMatrix = ... use position, rotation and scale
         modelMatrix = glm::mat4(1.f);
-        //modelMatrix = translate(modelMatrix, position);
+        modelMatrix = translate(modelMatrix, glm::vec3(0));
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1, 0, 0));
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0, 1, 0));
         modelMatrix = rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+        modelMatrix = translate(modelMatrix, position);
         modelMatrix = glm::scale(modelMatrix, scale);
     }
 

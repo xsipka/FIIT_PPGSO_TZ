@@ -97,7 +97,7 @@ public:
     if (position.y < -3.f) { return false; }
 
     position += speed * dTime * 0.5f;
-    speed += glm::vec3{0,-G,0} * dTime;
+    speed += glm::vec3{0, -G,0} * dTime;
 
     modelMatrix = glm::mat4(1.f);
     modelMatrix = translate(modelMatrix, position);
@@ -188,11 +188,11 @@ public:
         float z = min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max - min)));
 
         if (!chance()) {
-            auto values = glm::vec3 (-x * 0.5f, -y, -z);
+            auto values = glm::vec3 (-x * 0.5f, -G, -z);
             return values;
         }
         else {
-            auto values = glm::vec3(-x * 0.5f, y, z);
+            auto values = glm::vec3(x * 0.5f, -G, z);
             return values;
         }
     }
